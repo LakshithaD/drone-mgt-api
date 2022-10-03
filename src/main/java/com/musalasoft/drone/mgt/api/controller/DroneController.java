@@ -3,12 +3,14 @@ package com.musalasoft.drone.mgt.api.controller;
 import com.musalasoft.drone.mgt.api.controller.payload.DroneCreateRequest;
 import com.musalasoft.drone.mgt.api.controller.payload.DroneCreateResponse;
 import com.musalasoft.drone.mgt.api.dto.DroneDto;
+import com.musalasoft.drone.mgt.api.dto.MedicationDto;
 import com.musalasoft.drone.mgt.api.service.DroneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -28,9 +30,16 @@ public class DroneController {
     }
 
     @GetMapping(path = "/{droneId}")
-    public DroneDto registerDrone(@PathVariable String droneId) {
+    public DroneDto registerDrone(@PathVariable Long droneId) {
 
         log.debug("Request Received to get Drone. - { }", droneId);
-        return droneService.getDrone(1l);
+        return droneService.getDrone(droneId);
+    }
+
+    @GetMapping(path = "/{droneId}/medications")
+    public List<MedicationDto> getDroneMedications(@PathVariable Long droneId) {
+
+        log.debug("Request Received to get Drone. - { }", droneId);
+        return droneService.getDroneLoadedMedicationItems(droneId);
     }
 }

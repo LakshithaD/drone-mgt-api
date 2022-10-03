@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class DroneDto {
 
-    private Integer serialNo;
+    private String serialNo;
     private DroneModel model;
     private Float weightLimit;
     private Float batteryCapacity;

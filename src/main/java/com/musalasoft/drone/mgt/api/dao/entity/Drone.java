@@ -4,9 +4,8 @@ import com.musalasoft.drone.mgt.api.enums.DroneModel;
 import com.musalasoft.drone.mgt.api.enums.DroneState;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,4 +22,7 @@ public class Drone extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private DroneState state;
+
+    @OneToMany(mappedBy = "drone")
+    List<Medication> medications;
 }

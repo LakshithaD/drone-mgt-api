@@ -13,7 +13,7 @@ create table medication (
     name VARCHAR(100) NOT NULL,
     weight decimal(5,2) NOT NULL,
     code VARCHAR(50) NOT NULL,
-    imagePath VARCHAR(250) NOT NULL,
+    image_path VARCHAR(250) NOT NULL,
     drone_id INTEGER,
     PRIMARY KEY (id)
 );

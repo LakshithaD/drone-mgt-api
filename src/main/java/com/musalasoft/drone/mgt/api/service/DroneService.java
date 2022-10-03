@@ -5,4 +5,5 @@ import com.musalasoft.drone.mgt.api.dto.DroneDto;
 public interface DroneService {
 
     void registerDrone(DroneDto droneDto);
+    DroneDto getDrone(Long droneId);
 }

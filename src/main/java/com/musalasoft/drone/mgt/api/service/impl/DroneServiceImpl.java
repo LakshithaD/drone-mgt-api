@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class DroneServiceImpl implements DroneService {
@@ -22,5 +24,14 @@ public class DroneServiceImpl implements DroneService {
         }
         Drone drone = DroneConverter.convert(droneDto);
         droneRepository.save(drone);
+    }
+
+    @Override
+    public DroneDto getDrone(Long droneId) {
+
+        Optional<Drone> droneOptional = droneRepository.findById(droneId);
+        droneOptional.orElseThrow(() -> new RuntimeException("Drone Not  Found"));
+        DroneDto drone = DroneConverter.convert(droneOptional.get());
+        return drone;
     }
 }

@@ -67,4 +67,11 @@ public class DroneController {
         log.debug("Request Received to get available Drone.");
         return droneService.getAvailableDronesForLoading();
     }
+
+    @GetMapping(path = "{droneId}/battery")
+    public String getDroneBatteryLevel(@PathVariable Long droneId) {
+
+        log.debug("Request Received to get Drone battery level.");
+        return droneService.getDroneBatteryLevel(droneId);
+    }
 }

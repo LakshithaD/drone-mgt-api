@@ -23,4 +23,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         String bodyOfResponse = "Validation Exception";
         return new ResponseEntity<>(bodyOfResponse, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(value = BusinessException.class)
+    protected ResponseEntity<Object> handleBusinessException(BusinessException ex) {
+
+        String bodyOfResponse = ex.getMessage();
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    protected ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
+
+        String bodyOfResponse = ex.getMessage() + " Resource Id " + ex.getResource();
+        return new ResponseEntity<>(bodyOfResponse, HttpStatus.NOT_FOUND);
+    }
 }

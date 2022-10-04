@@ -126,6 +126,16 @@ public class DroneServiceImpl implements DroneService {
         return droneDtos;
     }
 
+    @Override
+    public String getDroneBatteryLevel(Long droneId) {
+
+        log.debug("Checking the drone battery level");
+        Optional<Drone> droneOptional = droneRepository.findById(droneId);
+        droneOptional.orElseThrow(() -> new ResourceNotFoundException("Drone not found", droneId.toString()));
+        Drone drone = droneOptional.get();
+        return drone.getBatteryCapacity().toString() + "%";
+    }
+
     /**
      * The method will check the drone can load more weight
      * @param drone drone to check

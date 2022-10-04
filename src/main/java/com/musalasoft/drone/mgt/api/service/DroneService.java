@@ -14,4 +14,5 @@ public interface DroneService {
     DroneDto getDrone(Long droneId);
     List<MedicationDto> getDroneLoadedMedicationItems(Long droneId);
     List<DroneDto> getAvailableDronesForLoading();
+    String getDroneBatteryLevel(Long droneId);
 }

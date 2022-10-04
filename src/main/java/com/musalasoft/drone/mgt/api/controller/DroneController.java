@@ -4,6 +4,7 @@ import com.musalasoft.drone.mgt.api.controller.payload.DroneCreateRequest;
 import com.musalasoft.drone.mgt.api.controller.payload.DroneCreateResponse;
 import com.musalasoft.drone.mgt.api.controller.payload.DroneLoadingRequest;
 import com.musalasoft.drone.mgt.api.controller.payload.MedicationRequest;
+import com.musalasoft.drone.mgt.api.dao.entity.Drone;
 import com.musalasoft.drone.mgt.api.dto.DroneDto;
 import com.musalasoft.drone.mgt.api.dto.MedicationDto;
 import com.musalasoft.drone.mgt.api.service.DroneService;
@@ -53,19 +54,17 @@ public class DroneController {
         log.debug("Drone medication loaded");
     }
 
-
-
-    @GetMapping(path = "/{droneId}")
-    public DroneDto registerDrone(@PathVariable Long droneId) {
-
-        log.debug("Request Received to get Drone. - { }", droneId);
-        return droneService.getDrone(droneId);
-    }
-
     @GetMapping(path = "/{droneId}/medications")
     public List<MedicationDto> getDroneMedications(@PathVariable Long droneId) {
 
         log.debug("Request Received to get Drone. - { }", droneId);
         return droneService.getDroneLoadedMedicationItems(droneId);
+    }
+
+    @GetMapping(path = "/available")
+    public List<DroneDto> getAvailableDronesForLoading() {
+
+        log.debug("Request Received to get available Drone.");
+        return droneService.getAvailableDronesForLoading();
     }
 }

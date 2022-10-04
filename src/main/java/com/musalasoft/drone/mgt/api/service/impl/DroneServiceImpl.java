@@ -14,6 +14,7 @@ import com.musalasoft.drone.mgt.api.excetions.ValidationException;
 import com.musalasoft.drone.mgt.api.service.DroneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +30,12 @@ public class DroneServiceImpl implements DroneService {
 
     private final DroneRepository droneRepository;
     private final MedicationRepository medicationRepository;
+
+    @Qualifier("serviceDroneConverter")
+    private final DroneConverter droneConverter;
+
+    @Qualifier("serviceMedicationConverter")
+    private final MedicationConverter medicationConverter;
     @Override
     public void registerDrone(DroneDto droneDto) {
 
@@ -37,7 +44,7 @@ public class DroneServiceImpl implements DroneService {
             throw new ValidationException("serialNo");
         }
         log.debug("converting to drone entity");
-        Drone drone = DroneConverter.convert(droneDto);
+        Drone drone = droneConverter.convert(droneDto);
         log.debug("saving the drone entity");
         droneRepository.save(drone);
         log.debug("saved the drone in database");
@@ -73,7 +80,7 @@ public class DroneServiceImpl implements DroneService {
         log.debug("converting to medication entities");
         List<Medication> medicationsList = medications
                 .stream()
-                .map(medicationDto -> MedicationConverter.convert(medicationDto, drone))
+                .map(medicationDto -> medicationConverter.convert(medicationDto, drone))
                 .collect(Collectors.toList());
 
         log.debug("saving the medication image in file path and setting the image path in entity");
@@ -91,7 +98,7 @@ public class DroneServiceImpl implements DroneService {
 
         Optional<Drone> droneOptional = droneRepository.findById(droneId);
         droneOptional.orElseThrow(() -> new ResourceNotFoundException("Drone not found", droneId.toString()));
-        DroneDto drone = DroneConverter.convert(droneOptional.get());
+        DroneDto drone = droneConverter.convert(droneOptional.get());
         return drone;
     }
 
@@ -102,7 +109,31 @@ public class DroneServiceImpl implements DroneService {
         droneOptional.orElseThrow(() -> new RuntimeException("Drone Not  Found"));
         List<Medication> medications = medicationRepository.findByDroneId(droneId);
         return medications.stream()
-                .map(MedicationConverter::convert)
+                .map(medication -> medicationConverter.convert(medication))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DroneDto> getAvailableDronesForLoading() {
+
+        List<DroneState> states = List.of(DroneState.LOADING, DroneState.IDLE, DroneState.DELIVERED);
+        List<Drone> drones = droneRepository.findByStateIn(states);
+        List<DroneDto> droneDtos = drones
+                .stream()
+                .filter(this::canAddMoreWeight)
+                .map(drone -> droneConverter.convertDroneOnly(drone))
+                .collect(Collectors.toList());
+        return droneDtos;
+    }
+
+    /**
+     * The method will check the drone can load more weight
+     * @param drone drone to check
+     * @return true if can add more medication otherwise false
+     */
+    private boolean canAddMoreWeight(Drone drone) {
+
+        Float currentWeight = drone.getMedications().stream().map(Medication::getWeight).reduce((weightOne, weightTwo) -> weightOne + weightTwo).get();
+        return currentWeight < drone.getWeightLimit();
     }
 }

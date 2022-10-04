@@ -4,16 +4,18 @@ import com.musalasoft.drone.mgt.api.dao.entity.Drone;
 import com.musalasoft.drone.mgt.api.dao.entity.Medication;
 import com.musalasoft.drone.mgt.api.dto.MedicationDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
-abstract class MedicationConverter {
+@Component("serviceMedicationConverter")
+class MedicationConverter {
 
-    static MedicationDto convert(Medication medication) {
+    MedicationDto convert(Medication medication) {
 
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(medication, MedicationDto.class);
     }
 
-    static Medication convert(MedicationDto medicationDto, Drone drone) {
+    Medication convert(MedicationDto medicationDto, Drone drone) {
 
         ModelMapper modelMapper = new ModelMapper();
         Medication medication = modelMapper.map(medicationDto, Medication.class);

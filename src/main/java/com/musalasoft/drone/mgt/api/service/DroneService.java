@@ -13,4 +13,5 @@ public interface DroneService {
     void loadDroneWithMedicationItems(Long droneId, List<MedicationDto> medications, MultipartFile[] images);
     DroneDto getDrone(Long droneId);
     List<MedicationDto> getDroneLoadedMedicationItems(Long droneId);
+    List<DroneDto> getAvailableDronesForLoading();
 }

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/drones")
+@RequestMapping("/api/1/drones")
 public class DroneController {
 
     private final DroneService droneService;

@@ -27,25 +27,6 @@ class DroneControllerTest {
     private DroneService droneService;
 
     @Test
-    void registerDrone() {
-    }
-
-    @Test
-    void loadDroneMedications() {
-
-    }
-
-    @Test
-    void getDroneMedications() throws Exception {
-
-
-    }
-
-    @Test
-    void getAvailableDronesForLoading() {
-    }
-
-    @Test
     void getDroneBatteryLevel() throws Exception {
 
         given(droneService.getDroneBatteryLevel(anyLong())).willReturn("25.4%");
